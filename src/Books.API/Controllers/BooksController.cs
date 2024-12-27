@@ -18,9 +18,10 @@ namespace Books.API.Controllers
 		// GET: /Books
 		[HttpGet]
 		[Route("Books")]
-		public async Task<IActionResult> GetBooks()
+		public async Task<IActionResult> GetBooks(int limit, int page)
 		{
-			var response = _bookServiceClient.GetBooks(new GetBooksRequest());
+			var response = _bookServiceClient.GetBooks(new GetBooksRequest()
+				{Limit = limit, Page = page});
 			var books = new List<BookUnit>();
 			await foreach (var book in response.ResponseStream.ReadAllAsync())
 			{
