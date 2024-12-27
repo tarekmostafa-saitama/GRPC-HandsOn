@@ -1,5 +1,6 @@
 ﻿using Books.GRPC;
 using Grpc.Core;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Books.API.Controllers
@@ -9,9 +10,10 @@ namespace Books.API.Controllers
 	{
 		private readonly BookService.BookServiceClient _bookServiceClient;
 
-		public BooksController(BookService.BookServiceClient bookServiceClient)
+		public BooksController(IConfiguration configuration)
 		{
-			_bookServiceClient = bookServiceClient;
+			var channel = GrpcChannel.ForAddress(configuration.GetValue<string>("GrpcBooksService:BaseUrl"));
+			_bookServiceClient = new BookService.BookServiceClient(channel);
 		}
 		// GET: /Books
 		[HttpGet]
