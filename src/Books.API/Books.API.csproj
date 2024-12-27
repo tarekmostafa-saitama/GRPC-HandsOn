@@ -2,12 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Books.GRPC\Protos\books.proto" GrpcServices="Client">
+      <Link>Protos\books.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+
 
 </Project>
