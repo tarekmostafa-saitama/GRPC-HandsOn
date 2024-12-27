@@ -1,9 +1,17 @@
+using Books.GRPC.DbContext;
 using Books.GRPC.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+
+
+builder.Services.AddDbContext<BooksContext>(options =>
+{
+	options.UseInMemoryDatabase("Books");
+});
 
 var app = builder.Build();
 
