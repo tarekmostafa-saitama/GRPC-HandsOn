@@ -10,6 +10,12 @@ service BookService {
   rpc AddBook (AddBookRequest) returns (AddBookResponse);
   rpc UpdateBook (UpdateBookRequest) returns (UpdateBookResponse);
   rpc DeleteBook (DeleteBookRequest) returns (DeleteBookResponse);
+
+  rpc AddBooksFromExcel (AddBooksFromExcelRequest) returns (AddBooksFromExcelResponse);
+
+  
+
+
 }
 
 message GetBookRequest {
@@ -51,3 +57,10 @@ message BookUnit {
   string description = 4;
   string image = 5;
 }
+message AddBooksFromExcelRequest {
+  bytes file = 1;
+}
+message AddBooksFromExcelResponse {
+  bool success = 1;
+}
+

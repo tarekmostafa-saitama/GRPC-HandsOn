@@ -1,4 +1,5 @@
 ﻿using Books.GRPC;
+using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -57,5 +58,20 @@ namespace Books.API.Controllers
 			var response = await _bookServiceClient.DeleteBookAsync(new DeleteBookRequest { Id = id });
 			return Ok(response);
 		}
+
+		[HttpPost("FromExcel")]
+		public async Task<IActionResult> CreateBooksFromExcel(IFormFile excelFile)
+		{
+			var request = new AddBooksFromExcelRequest();
+			using (var ms = new MemoryStream())
+			{
+				await excelFile.CopyToAsync(ms);
+				request.File = ByteString.CopyFrom(ms.ToArray());
+			}
+			var response = await _bookServiceClient.AddBooksFromExcelAsync(request);
+			return Ok(response);
+		}
+
+
 	}
 }

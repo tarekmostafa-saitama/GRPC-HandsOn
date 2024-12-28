@@ -109,4 +109,36 @@ public class BookService: GRPC.BookService.BookServiceBase
 		};
 
 	}
+
+	public override async Task<AddBooksFromExcelResponse> AddBooksFromExcel(AddBooksFromExcelRequest request, ServerCallContext context)
+	{
+		using (var stream = new MemoryStream(request.File.ToByteArray()))
+		{
+			using (var workbook = new ClosedXML.Excel.XLWorkbook(stream))
+			{
+				var worksheet = workbook.Worksheet(1);
+				var rows = worksheet.RowsUsed(); 
+
+				var books = new List<Book>();
+				foreach (var row in rows)
+				{
+					var book = new Book
+					{
+						Title = row.Cell(1).GetString(),
+						Author = row.Cell(2).GetString(),
+						Description = row.Cell(3).GetString(),
+						Image = row.Cell(4).GetString()
+					};
+					books.Add(book);
+				}
+				await _booksContext.Books.AddRangeAsync(books);
+				await _booksContext.SaveChangesAsync();
+			}
+		}
+
+		return new AddBooksFromExcelResponse
+		{
+			Success = true
+		};
+	}
 }
